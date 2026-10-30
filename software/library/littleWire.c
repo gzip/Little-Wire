@@ -1,7 +1,7 @@
 /*
   Cross platform computer interface library for Little Wire project
   
-  http://littlewire.cc
+  http://littlewire.github.io
 
   Copyright (C) <2013> ihsan Kehribar <ihsan@kehribar.me>
   Copyright (C) <2013> Omer Kilic <omerkilic@gmail.com>
@@ -29,6 +29,13 @@
 * See the littleWire.h for the function descriptions/comments 
 /*****************************************************************************/
 #include "littleWire.h"
+
+// external variables
+lwCollection lwResults[16];
+int lw_totalDevices;
+unsigned char rxBuffer[RX_BUFFER_SIZE]; /* This has to be unsigned for the data's sake */
+unsigned char ROM_NO[8];
+int lwStatus;
 
 unsigned char	crc8;
 int		LastDiscrepancy;
@@ -89,10 +96,12 @@ int littlewire_search()
             {
               lwResults[lw_totalDevices].serialNumber = atoi(string);
               lwResults[lw_totalDevices].lw_device = dev;
+              lw_totalDevices++;
+            } else {
+              printf("Connection error! Try creating a udev rule or running with sudo.\n");
             }
           }
           usb_close(udev);
-          lw_totalDevices++;        
         }
       }
     }
